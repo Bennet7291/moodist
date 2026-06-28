@@ -1,0 +1,3 @@
+{
+  "*.{astro,css,html,js,jsx,json,jsonc,md,ts,tsx}": "biome check --write --no-errors-on-unmatched"
+}

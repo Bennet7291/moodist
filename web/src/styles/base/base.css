@@ -1,0 +1,27 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-base);
+  color: var(--color-foreground);
+  background-color: var(--color-neutral-50);
+  /* Workaround for modal and scrollbar layout shifts */
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+::selection {
+  color: var(--color-foreground);
+  background-color: var(--color-neutral-300);
+}

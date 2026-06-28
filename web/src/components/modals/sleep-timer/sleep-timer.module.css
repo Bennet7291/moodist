@@ -1,0 +1,98 @@
+.header {
+  margin-bottom: 28px;
+
+  & .title {
+    margin-bottom: 8px;
+    font-family: var(--font-heading);
+    font-size: var(--font-md);
+    font-weight: 600;
+  }
+
+  & .desc {
+    color: var(--color-foreground-subtle);
+  }
+}
+
+.controls {
+  margin-top: 8px;
+
+  & .inputs {
+    display: flex;
+    column-gap: 12px;
+    align-items: flex-end;
+    width: 100%;
+
+    & .field {
+      flex-grow: 1;
+
+      & .label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: var(--font-sm);
+        font-weight: 500;
+      }
+
+      & .input {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        height: 40px;
+        padding: 0 8px;
+        color: var(--color-foreground);
+        background-color: var(--color-neutral-50);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: 4px;
+        outline: none;
+
+        &:focus-visible {
+          outline: 2px solid var(--color-neutral-400);
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+
+  & .buttons {
+    display: flex;
+    column-gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 16px;
+
+    & .button {
+      padding: 12px 16px;
+      font-family: var(--font-heading);
+      font-size: var(--font-sm);
+      font-weight: 600;
+      color: var(--color-foreground-subtle);
+      cursor: pointer;
+      background-color: var(--color-neutral-200);
+      border: none;
+      border-radius: 4px;
+      outline: none;
+      transition: 0.2s;
+
+      &:focus-visible {
+        outline: 2px solid var(--color-neutral-400);
+        outline-offset: 2px;
+      }
+
+      &:hover,
+      &:focus-visible {
+        color: var(--color-foreground);
+        background-color: var(--color-neutral-300);
+      }
+
+      &.primary {
+        color: var(--color-neutral-200);
+        background-color: var(--color-neutral-950);
+
+        &:hover,
+        &:focus-visible {
+          background-color: var(--color-neutral-800);
+        }
+      }
+    }
+  }
+}
