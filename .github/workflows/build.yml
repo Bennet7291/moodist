@@ -42,7 +42,7 @@ jobs:
     # === 🚀 步骤 4：打包 Go 程序 ===
     - name: Build Execution File
       run: |
-        go build -ldflags="-s -w -H windowsgui" -o moodist_win_x64.exe ./cmd/moodist
+        go build -ldflags="-s -w" -o moodist_win_x64.exe ./cmd/moodist
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
