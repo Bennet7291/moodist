@@ -1,4 +1,4 @@
-name: Build Moodist for Windows
+name: Build Moodist for Win and Linux
 
 on:
   push:
@@ -6,30 +6,26 @@ on:
   workflow_dispatch:
 
 jobs:
+  # ================= Windows 打包任务 =================
   build-windows:
     runs-on: windows-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # === 🚀 步骤 1：安装 Node.js 环境 ===
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
 
-    # === 🚀 步骤 2：编译前端并移动产物到正确位置 ===
     - name: Build Frontend Web Assets
       run: |
         cd web
         npm install
         npm run build
         cd ..
-        # 核心：将生成的网页挪到 Go 期望的 cmd/moodist 目录下
         xcopy /E /I web\dist cmd\moodist\dist
 
-    # === 🚀 步骤 3：安装 Go 环境 ===
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
@@ -39,7 +35,6 @@ jobs:
       run: |
         go mod tidy
 
-    # === 🚀 步骤 4：打包 Go 程序 ===
     - name: Build Execution File
       run: |
         go build -ldflags="-s -w" -o moodist_win_x64.exe ./cmd/moodist
@@ -47,5 +42,48 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Moodist-Windows-x64-GreenVersion
+        name: Moodist-Windows-x64
         path: moodist_win_x64.exe
+
+  # ================= Linux ELF 打包任务（新增） =================
+  build-linux:
+    runs-on: ubuntu-latest  # 白嫖纯正的 Linux 环境进行编译
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # 同样的逻辑：先在 Linux 环境下编译前端
+    - name: Build Frontend Web Assets
+      run: |
+        cd web
+        npm install
+        npm run build
+        cd ..
+        mkdir -p cmd/moodist/dist
+        cp -r web/dist/* cmd/moodist/dist/
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+
+    - name: Get dependencies
+      run: |
+        go mod tidy
+
+    - name: Build Linux ELF Binary
+      run: |
+        # CGO_ENABLED=0 确保生成的 ELF 是纯静态链接，不依赖任何特定 Linux 版本的 glibc 库，真正的“解压即用”
+        # -s -w 参数继续用来让二进制文件极致瘦身
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o moodist_linux_x64 ./cmd/moodist
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Moodist-Linux-x64-ELF
+        path: moodist_linux_x64
