@@ -19,9 +19,10 @@ jobs:
       with:
         node-version: '20'
 
-    # === 🚀 步骤 2：编译前端，生成 dist 文件夹 ===
+    # === 🚀 步骤 2：先进入 web 目录，再编译前端 ===
     - name: Build Frontend Web Assets
       run: |
+        cd web
         npm install
         npm run build
 
