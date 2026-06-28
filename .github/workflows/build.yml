@@ -19,12 +19,15 @@ jobs:
       with:
         node-version: '20'
 
-    # === 🚀 步骤 2：先进入 web 目录，再编译前端 ===
+    # === 🚀 步骤 2：编译前端并移动产物到正确位置 ===
     - name: Build Frontend Web Assets
       run: |
         cd web
         npm install
         npm run build
+        cd ..
+        # 核心：将生成的网页挪到 Go 期望的 cmd/moodist 目录下
+        xcopy /E /I web\dist cmd\moodist\dist
 
     # === 🚀 步骤 3：安装 Go 环境 ===
     - name: Set up Go
