@@ -1,0 +1,33 @@
+name: Build Moodist for Windows
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22.2'
+
+    - name: Get dependencies
+      run: |
+        go mod tidy
+
+    - name: Build Execution File
+      run: |
+        go build -ldflags="-s -w -H windowsgui" -o moodist_win_x64.exe ./cmd/moodist
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Moodist-Windows-x64-GreenVersion
+        path: moodist_win_x64.exe
